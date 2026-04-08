@@ -1,4 +1,4 @@
-# Guest Details - Electron & PHP Application
+# ViziPazz
 
 This repository contains a full-stack desktop and web application designed to manage guest entry and scanning details.
 

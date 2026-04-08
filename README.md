@@ -4,7 +4,7 @@ This repository contains a full-stack desktop and web application designed to ma
 
 ## Project Architecture
 - **Frontend**: Built using standard HTML/CSS/JS and wrapped in an **Electron** shell (`main.js`).
-- **Scanner Backend**: Built in **PHP** (`Scanners_DB`), designed to be hosted via XAMPP/WAMP.
+- **Scanner Backend**: Built in **PHP** (`backend/php`), designed to be hosted via XAMPP/WAMP.
 - **Email Server**: Built in **Express** (`GUEST_DETAILS/server.js`), utilized for sending email notifications through Nodemailer.
 
 ## Setup Instructions

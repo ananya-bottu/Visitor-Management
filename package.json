@@ -35,13 +35,17 @@
     },
     "extraFiles": [
       {
-        "from": "htdocs/",
-        "to": "htdocs/",
+        "from": "frontend/",
+        "to": "frontend/",
         "filter": [
-          "**/*.php",
-          "**/*.html",
-          "**/*.js",
-          "**/*.css"
+          "**/*"
+        ]
+      },
+      {
+        "from": "backend/",
+        "to": "backend/",
+        "filter": [
+          "**/*"
         ]
       }
     ]

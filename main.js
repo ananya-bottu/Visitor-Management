@@ -14,7 +14,7 @@ app.whenReady().then(() => {
     });
 
     // Correcting the file path using path.join
-    const filePath = path.join(__dirname, 'staring_animation.html');
+    const filePath = path.join(__dirname, 'frontend/views/staring_animation.html');
 
     // Load the file
     mainWindow.loadFile(filePath).catch(err => console.error("Failed to load:", err));

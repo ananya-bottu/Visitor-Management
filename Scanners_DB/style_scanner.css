@@ -1,0 +1,175 @@
+
+        :root {
+            --primary: #6a5acd;
+            --primary-light: #9370db;
+            --secondary: #ba55d3;
+            --text-dark: #000000;
+            --text-light: #ffffff;
+        }
+        .logo-container {
+            position: absolute;
+            top: 70px;
+            left: 800px;
+          }
+          .logo {
+            height: 50px; 
+            width: auto;
+            border-radius: 12px; 
+          }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient( #c171b0, #7683a1, #fbc2eb, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: var(--text-dark);
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .scanner-container {
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 90%;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        h1 {
+            color: var(--text-dark);
+            margin: 0 0 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-light), var(--secondary));
+            border-radius: 3px;
+        }
+
+        #reader {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #result {
+            margin: 1.5rem 0;
+            padding: 1.25rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            text-align: left;
+            border-left: 4px solid var(--primary);
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.7), rgba(106, 90, 205, 0.7));
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, rgba(186, 85, 211, 0.7), rgba(153, 50, 204, 0.7));
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, rgba(106, 90, 205, 0.9), rgba(70, 60, 180, 0.9));
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        #qr-input-file {
+            display: none;
+        }
+
+        .scan-instruction {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin: 0.5rem 0 1.5rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 480px) {
+            .scanner-container {
+                padding: 1.75rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }

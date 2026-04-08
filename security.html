@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security login form</title>
+  <link rel="stylesheet" href="button.css">
+  <link rel="stylesheet" href="style1.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+    .input-box {
+      margin-bottom: 15px;
+    }
+    .form-error {
+      color: red;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #vehicleSelection {
+      margin-bottom: 20px;
+    }
+    .logo-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+.logo {
+  height: 50px; 
+  width: auto;
+  border-radius: 12px; 
+}
+.arrow-container {
+    position:absolute;
+    top:10px;
+    left:10px;
+  }
+  </style>
+</head>
+<body>
+  <div class="arrow-container">
+    <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+      <span class="arrow">←</span>
+    </button>
+    
+    <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+      <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+    </button>
+  </div>
+  <div class="logo-container">
+    <img src="logo.png" alt="Logo" class="logo" />
+  </div>
+  <div class="wrapper">
+    <form id="guestForm" >
+      <h1>SECURITY DETAILS</h1>
+      <div id="formError" class="form-error" style="display: none;">Please fill all required fields</div>
+
+      <div class="input-box">
+        <input type="text" id="guestName" placeholder="Security ID" required autocomplete="off">
+        <i class='bx bxs-user'></i>
+        <div id="guestNameError" class="error-message">Please enter correct user id</div>
+      </div>
+
+      <div class="input-box">
+        <input type="password" id="Student" placeholder="Password" required autocomplete="off">
+        <i class='bx bx-lock'></i>
+        <div id="studentIdError" class="error-message">Please enter a correct password </div>
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn" disabled>SUBMIT</button><br>
+     <center><div id="neha"></div></center> 
+    </form>
+  </div>
+
+  <script>
+    // Valid username-password pairs
+    const validCredentials = [
+      { username: "securityone", password: "hello@" },
+      { username: "SecurityTwo", password: "#Safe$Entry!" }
+    ];
+
+    // Track validation states
+    let isNameValid = false;
+    let isStudentIdValid = false;
+    let isCredentialMatch = false;
+
+    // Get form elements
+    const guestForm = document.getElementById('guestForm');
+    const guestNameInput = document.getElementById('guestName');
+    const studentIdInput = document.getElementById('Student');
+    const submitBtn = document.getElementById('submitBtn');
+    const formError = document.getElementById('formError');
+
+    // Input validation
+    guestNameInput.addEventListener('blur', validateName);
+    studentIdInput.addEventListener('blur', validateStudentId);
+
+    function validateName() {
+      const name = guestNameInput.value.trim();
+      isNameValid = /^[A-Za-z ]+$/.test(name) && name.length > 0;
+      document.getElementById('guestNameError').style.display = 
+        (name && !isNameValid) ? 'block' : 'none';
+      validateForm();
+    }
+
+    function validateStudentId() {
+      const password = studentIdInput.value.trim();
+      isStudentIdValid = /^[A-Za-z@#$%^&*!]+$/.test(password) && password.length > 0;
+      document.getElementById('studentIdError').style.display = 
+        (password && !isStudentIdValid) ? 'block' : 'none';
+      validateForm();
+    }
+
+    function validateForm() {
+      const isValid = isNameValid && isStudentIdValid;
+      submitBtn.disabled = !isValid;
+      return isValid;
+    }
+    function hello() {
+  let hey = document.getElementById("neha");
+  hey.innerHTML = "<span style='color: green; font-weight: bold;'>✅ FORM SUBMITTED</span>";
+  setTimeout(() => {
+    window.location.href = "file:///C:/Users/anany_zkhrray/OneDrive/Desktop/Programs/electron/securityChoice.html";
+  }, 500);
+  
+}
+
+    
+
+
+guestForm.addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  validateName();
+  validateStudentId();
+
+  if (!validateForm()) {
+    formError.style.display = 'block';
+    formError.innerText = "Please fill all required fields";
+    return;
+  }
+
+  const enteredName = guestNameInput.value.trim();
+  const enteredPassword = studentIdInput.value.trim();
+
+  isCredentialMatch = validCredentials.some(cred =>
+    cred.username === enteredName && cred.password === enteredPassword
+  );
+
+  if (!isCredentialMatch) {
+    formError.style.display = 'block';
+    formError.innerText = "Enter correct username and password";
+    return;
+  }
+
+  // ✅ If everything is valid and matches
+  formError.style.display = 'none';
+  formError.innerText = "";
+  hello(); // Now this will ONLY run if credentials match
+});
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+.arrow-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .arrow-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(230, 223, 228);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+      0 3px 0 #ddd,
+      0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    top: 0;
+  }
+  
+  .arrow-btn:hover {
+    background: #f0f0f0;
+  }
+  
+  .arrow-btn:hover {
+    background: #f0f0f0;
+  }
+  
+  .arrow-btn:active {
+    top: 3px;
+    box-shadow: 
+      0 0px 0 #ddd,
+      0 1px 2px rgba(0,0,0,0.1);
+    transform: scale(0.98);
+  }
+  
+  .arrow {
+    font-size: 25px;
+    color: black;
+    font-weight: bold;
+    transition: transform 0.2s;
+  }
+  
+  .arrow-btn:active .arrow {
+    transform: translateY(1px);
+  }
+  
+  /* Separate forward arrow character */
+  .forward-arrow {
+    display: inline-block;
+  }

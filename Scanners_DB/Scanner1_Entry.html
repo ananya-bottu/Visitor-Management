@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENTRY SCANNER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="style_scanner.css" rel="stylesheet">
+    <link rel="stylesheet" href="button.css">
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
+    <style>
+    .logo-container {
+        position: absolute;
+        top: 10px;
+        right: -10px;
+    }
+    .logo {
+        height: 50px; 
+        width: auto;
+        border-radius: 12px; 
+    }
+    .arrow-container {
+    position:absolute;
+    top:10px;
+    left:10px;
+  }
+    </style>
+</head>
+<body>
+   <!-- <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo" />
+      </div>  -->
+    <div class="arrow-container">
+        <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+          <span class="arrow">←</span>
+        </button>
+        
+        <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+          <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+        </button>
+      </div>
+      
+    
+    <div class="scanner-container">
+        <h1>ENTRY SCANNER</h1>
+        <p class="scan-instruction">Position QR code within frame to scan</p>
+        
+        <div id="reader">
+            <video id="preview" style="width: 100%; height: 100%; object-fit: cover;"></video>
+        </div>
+        <div id="result">Scan results will appear here...</div>
+
+        <div class="buttons">
+            <label class="btn btn-upload">
+                Upload QR Image
+                <input type="file" id="qr-input-file" accept="image/*">
+            </label>
+            <button id="send-btn" class="btn btn-submit" disabled onclick="sendToDatabase()">
+                Submit Details
+            </button>
+        </div>
+        <div id="status-message"></div>
+    </div>
+
+    <script>
+        let name = "", rollNumber = "", phoneNumber = "", carNumber = "N/A", scanTime = "";
+        let scanner = null;
+    
+        function escapeHTML(text) {
+            return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function onScanSuccess(content) {
+            try {
+                console.log("Scanned Text:", content);
+
+                let timeMatch = content.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/);
+                let scanTimeUTC = timeMatch ? new Date(timeMatch[1]) : new Date();
+                let scanTimeIST = new Date(scanTimeUTC.getTime() + (5.5 * 60 * 60 * 1000))
+                                    .toISOString().slice(0, 19).replace('T', ' ');
+
+                let nameMatch = content.match(/(?:Guest Name|Name)[:\s]*([A-Za-z\s]+)(?=\n|$)/i);
+                let rollMatch = content.match(/(?:Roll Number|Student ID)[:\s]*([\w\d.-]+)/i);
+                let phoneMatch = content.match(/(?:Phone Number|Phone)[:\s]*(\d{10})/);
+                let carMatch = content.match(/(?:Car Number|Vehicle)[:\s]*([\w\d-]+)/i);
+
+                name = nameMatch ? nameMatch[1].trim() : "N/A";
+                rollNumber = rollMatch ? rollMatch[1].trim() : "N/A";
+                phoneNumber = phoneMatch ? phoneMatch[1].trim() : "N/A";
+                carNumber = carMatch ? carMatch[1].trim() : "N/A";
+                scanTime = scanTimeIST;
+
+                document.getElementById('result').innerHTML = `
+                    <strong>Name:</strong> ${escapeHTML(name)}<br>
+                    <strong>Student ID:</strong> ${escapeHTML(rollNumber)}<br>
+                    <strong>Phone:</strong> ${escapeHTML(phoneNumber)}<br>
+                    <strong>Car Number:</strong> ${escapeHTML(carNumber)}<br>
+                    <strong>Scanned At (IST):</strong> ${escapeHTML(scanTime)}
+                `;
+
+                document.getElementById('send-btn').disabled = false;
+            } catch (error) {
+                document.getElementById('result').textContent = "Error scanning QR code";
+                document.getElementById('send-btn').disabled = true;
+            }
+        }
+
+        function sendToDatabase() {
+            let formData = new FormData();
+            formData.append("name", name);
+            formData.append("roll_number", rollNumber);
+            formData.append("phone_number", phoneNumber);
+            formData.append("car_number", carNumber);
+            formData.append("scan_time", scanTime);
+
+            fetch("SCAN_DUMMY.php", { method: "POST", body: formData })
+            .then(response => response.json())
+            .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('status-message').textContent = "✅ Entry saved successfully!";
+                document.getElementById('status-message').className = "success";
+            } else {
+                document.getElementById('status-message').textContent = "❌ Error: " + data.message;
+                document.getElementById('status-message').className = "error";
+            }
+        })
+        .catch(error => {
+            document.getElementById('status-message').textContent = "❌ Network error!";
+            document.getElementById('status-message').className = "error";
+            console.error("Error:", error);
+        });
+        }
+
+        function initScanner() {
+            scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
+            scanner.addListener('scan', onScanSuccess);
+
+            Instascan.Camera.getCameras().then(cameras => {
+                if (cameras.length > 0) scanner.start(cameras[0]);
+                else throw new Error('No cameras found');
+            }).catch(e => {
+                document.getElementById('result').textContent = "Camera error: " + e;
+            });
+        }
+
+        document.getElementById("qr-input-file").addEventListener("change", function(event) {
+            let file = event.target.files[0];
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    let qr = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+                    if (qr) {
+                        onScanSuccess(qr.data);
+                    }
+                    else {
+                        document.getElementById('status-message').textContent = "QR Code not detected.";
+                        document.getElementById('status-message').className = "error";
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        window.addEventListener('DOMContentLoaded', initScanner);
+    </script>
+</body>
+</html>

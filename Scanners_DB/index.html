@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guests Currently in Campus</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="button.css">
+    <style>
+        .arrow-container {
+        z-index: 1000;
+        position: fixed;
+        top:10px;
+        left:10px;
+      }
+      .logo-container { 
+        z-index: 1000; 
+        position: fixed;
+        top: 10px;
+        right: 20px;
+    }
+        .logo {
+        height: 50px; 
+        width: auto;
+        border-radius: 12px; 
+        }
+        </style>
+    <script>
+        function fetchGuests() {
+            fetch("fetch_guests.php")
+                .then(response => response.json()) 
+                .then(data => {
+                    let tableBody = document.getElementById("guestTableBody");
+                    tableBody.innerHTML = ""; // Clear table before inserting new data
+                    
+                    data.forEach(guest => {
+                        let row = `<tr>
+                            <td>${guest.roll_number}</td>
+                            <td>${guest.name}</td>
+                            <td>${guest.phone_number}</td>
+                            <td>${guest.car_number || 'N/A'}</td>
+                            <td>${guest.scan_time}</td>
+                            <td>${guest.scan2_time || 'Not Scanned'}</td>
+                            <td>${guest.exit_time || 'Not Exited'}</td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Error fetching data:", error));
+        }
+
+        setInterval(fetchGuests, 3000); // Auto-refresh every 3 seconds
+        window.onload = fetchGuests; // Fetch data on page load
+    </script>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="./logo.png" alt="Logo" class="logo" />
+      </div>
+    <div class="arrow-container">
+        <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+          <span class="arrow">←</span>
+        </button>
+        
+        <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+          <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+        </button>
+      </div>
+    <div class="container">
+        <h1>Guests Currently in Campus</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll No</th>
+                    <th>Guest Name</th>
+                    <th>Phone No</th>
+                    <th>Vehicle No</th>
+                    <th>Entry Scan</th>
+                    <th>Warden Scan</th>
+                    <th>Exit Time</th> <!-- New Exit Time Column -->
+                </tr>
+            </thead>
+            <tbody id="guestTableBody">
+                <!-- Data will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

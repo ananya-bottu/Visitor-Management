@@ -1,0 +1,310 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+  <link rel="stylesheet" href="./style1.css">
+  <link rel="stylesheet" href="button.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+   .arrow-container {
+    position:absolute;
+    top:10px;
+    left:10px;
+  }
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+    .input-box {
+      margin-bottom: 15px;
+    }
+    .form-error {
+      color: red;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .qrcode {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #vehicleSelection {
+      margin-bottom: 20px;
+    }
+    .logo-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+.logo {
+  height: 50px; 
+  width: auto;
+  border-radius: 12px; 
+}
+  </style>
+</head>
+<body>
+    <div class="arrow-container">
+        <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+          <span class="arrow">←</span>
+        </button>
+        
+        <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+          <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+        </button>
+      </div>
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo" />
+      </div>
+
+    <div class="wrapper">
+        <form id="guestForm">
+            <h1>GUEST DETAILS</h1>
+            <div id="formError" class="form-error" style="display: none;">Please fill all required fields</div>
+            
+            <div class="input-box">
+                <input type="text" id="guestName" placeholder="Guest Name" required>
+                <i class='bx bxs-user'></i>
+                <div id="guestNameError" class="error-message">Please enter a valid name (letters and spaces only)</div>
+            </div>
+            
+            <div class="input-box">
+                <input type="text" id="phoneNumber" placeholder="Phone Number" required>
+                <i class='bx bx-phone'></i>
+                <div id="phoneError" class="error-message">Please enter a valid phone number (10 digits only)</div>
+            </div>
+            
+            <div class="input-box">
+                <input type="text" id="studentID" placeholder="Student ID" required>
+                <i class='bx bx-child'></i>
+                <div id="studentIdError" class="error-message">Please enter a valid Student ID (format: CB.XX.X0XXX00000)</div>
+            </div>
+            
+            <div id="vehicleSelection">
+               Vehicle &nbsp;
+               <button type="button" class="buttonn yes-btn" onclick="showCarNumber(true)">YES</button>
+               <button type="button" class="buttonn no-btn" onclick="showCarNumber(false)">NO</button>
+               <div id="vehicleError" class="error-message">Please select Yes or No for vehicle</div>
+            </div>
+            
+            <div class="input-box" id="carNumberBox" style="display: none;">
+                <input type="text" id="carNumber" 
+                       placeholder="XX00XX0000">
+                <i class='bx bxs-car'></i>
+                <div id="carNumberError" class="error-message">Please enter a valid car number (format: XX00XX0000)</div>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn" disabled>SUBMIT</button>
+        </form>
+
+        <div class="qrcode" id="qrcode"></div>
+    </div>
+
+    <script>
+        // Track form validation states
+        let isNameValid = false;
+        let isPhoneValid = false;
+        let isStudentIdValid = false;
+        let isVehicleSelected = false;
+        let isCarNumberValid = true; // Default true unless vehicle is required
+        
+        // Get all form elements
+        const guestForm = document.getElementById('guestForm');
+        const guestNameInput = document.getElementById('guestName');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const studentIdInput = document.getElementById('studentID');
+        const carNumberInput = document.getElementById('carNumber');
+        const submitBtn = document.getElementById('submitBtn');
+        const formError = document.getElementById('formError');
+
+        // Add input event listeners for validation
+        guestNameInput.addEventListener('input', validateName);
+        phoneNumberInput.addEventListener('input', validatePhone);
+        studentIdInput.addEventListener('input', validateStudentId);
+        carNumberInput.addEventListener('input', validateCarNumber);
+
+        function showCarNumber(show) {
+            isVehicleSelected = true;
+            document.getElementById('vehicleError').style.display = 'none';
+            
+            const carNumberBox = document.getElementById('carNumberBox');
+            if (show) {
+                carNumberBox.style.display = 'block';
+                isCarNumberValid = false; // Now required, starts invalid
+            } else {
+                carNumberBox.style.display = 'none';
+                carNumberInput.value = '';
+                isCarNumberValid = true; // Not required
+                document.getElementById('carNumberError').style.display = 'none';
+            }
+            validateForm();
+        }
+
+        function validateName() {
+            const name = guestNameInput.value.trim();
+            isNameValid = /^[A-Za-z ]+$/.test(name) && name.length > 0;
+            document.getElementById('guestNameError').style.display = 
+                (name && !isNameValid) ? 'block' : 'none';
+            validateForm();
+        }
+
+        function validatePhone() {
+            const phone = phoneNumberInput.value.trim();
+            isPhoneValid = /^[0-9]{10}$/.test(phone);
+            document.getElementById('phoneError').style.display = 
+                (phone && !isPhoneValid) ? 'block' : 'none';
+            validateForm();
+        }
+
+        function validateStudentId() {
+            const studentId = studentIdInput.value.trim();
+            isStudentIdValid = /^CB\.[A-Z]{2}\.[UPIR][2-5][A-Z]{3}[0-9]{5}$/.test(studentId);
+            document.getElementById('studentIdError').style.display = 
+                (studentId && !isStudentIdValid) ? 'block' : 'none';
+            validateForm();
+        }
+
+        function validateCarNumber() {
+            const carNumber = carNumberInput.value.trim();
+            isCarNumberValid = /^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/.test(carNumber);
+            document.getElementById('carNumberError').style.display = 
+                (carNumber && !isCarNumberValid) ? 'block' : 'none';
+            validateForm();
+        }
+
+        function validateForm() {
+            const isValid = isNameValid && isPhoneValid && isStudentIdValid && 
+                          isVehicleSelected && (isCarNumberValid || !isCarNumberValid);
+            
+            submitBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        guestForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // First validate all fields
+            validateName();
+            validatePhone();
+            validateStudentId();
+            
+            // Check if vehicle is selected
+            if (!isVehicleSelected) {
+                document.getElementById('vehicleError').style.display = 'block';
+                formError.style.display = 'block';
+                return;
+            }
+            
+            // Check car number if vehicle is yes
+            const carNumberBox = document.getElementById('carNumberBox');
+            if (carNumberBox.style.display === 'block') {
+                validateCarNumber();
+                if (!isCarNumberValid) {
+                    formError.style.display = 'block';
+                    return;
+                }
+            }
+            
+            // If any field is invalid, show error
+            if (!validateForm()) {
+                formError.style.display = 'block';
+                return;
+            }
+            
+            formError.style.display = 'none';
+            
+            // Proceed with form submission
+            const formData = {
+                guestName: guestNameInput.value,
+                phoneNumber: phoneNumberInput.value,
+                studentID: studentIdInput.value,
+                carNumber: carNumberInput.value
+            };
+
+            fetch("http://localhost:3000/send-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    checkApprovalStatus(studentIdInput.value, formData);
+                } else {
+                    alert("Failed to send email:"+(data.message|| "Please try again."));
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        function checkApprovalStatus(studentID, formData) {
+            let interval = setInterval(() => {
+                fetch(`http://localhost:3000/check-approval?studentID=${studentID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Approval Check Response:", data);
+
+                        if (data.status === "approved") {
+                            clearInterval(interval);
+                            generateQRCode(formData);
+                        } else if (data.status === "rejected") {
+                            clearInterval(interval);
+                            document.getElementById("qrcode").innerHTML = "<p style='color: red;'>Your request has been rejected.</p>";
+                        }
+
+                    })
+                    .catch(error => console.error("Error checking approval:", error));
+            }, 5000);
+        }
+
+        function generateQRCode(formData) {
+            let qrData = `Guest Name: ${formData.guestName}\nPhone Number: ${formData.phoneNumber}\nRoll Number: ${formData.studentID}`;
+            
+            if (formData.carNumber) {
+                qrData += `\nCar Number: ${formData.carNumber}`;
+            }
+
+            document.getElementById("qrcode").innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            setTimeout(downloadQRCode, 500);
+        }
+        function downloadQRCode() {
+            const qrCodeElement = document.querySelector("#qrcode img");
+            if (!qrCodeElement) return;
+            
+            // Create a canvas element
+            const canvas = document.createElement("canvas");
+            canvas.width = qrCodeElement.width;
+            canvas.height = qrCodeElement.height;
+            
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(qrCodeElement, 0, 0);
+            
+            // Convert canvas to JPG and download
+            const link = document.createElement("a");
+            link.download = "guest-qrcode.jpg";
+            link.href = canvas.toDataURL("image/jpeg", 1.0);
+            link.click();
+        }
+    </script>
+</body>
+</html>
+</html>

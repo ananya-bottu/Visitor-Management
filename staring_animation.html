@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizipazz Loading</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            background:white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+            animation: colorShift 15s infinite;
+        }
+
+        /* BUBBLES - FASTER AND MORE VISIBLE */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(252, 157, 206, 0.5); /* More opaque */
+            border-radius: 50%;
+            animation: rise 8s infinite ease-in; /* Faster animation */
+            filter: blur(1px);
+            box-shadow: 
+                0 0 8px rgba(255, 255, 255, 0.9), /* Brighter glow */
+                0 0 15px rgba(255, 255, 255, 0.7);
+            bottom: -50px; /* Start higher */
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -50px;
+                transform: translateX(0) scale(1);
+                opacity: 0.7; /* Start more visible */
+            }
+            50% {
+                opacity: 1; /* Peak visibility */
+            }
+            100% {
+                bottom: 100vh;
+                transform: translateX(calc((var(--random-x) - 0.5) * 150px)) scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        /* Rest of your existing styles... */
+        body.loaded .scene {
+            animation: fade-out-up 0.5s forwards;
+        }
+
+        body.loaded .loading-container {
+            animation: fade-out 0.5s forwards;
+        }
+
+        @keyframes fade-out-up {
+            to {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+
+        @keyframes fade-out {
+            to {
+                opacity: 0;
+            }
+        }
+
+        :root {
+            --current-primary: var(--primary-pink);
+            --primary-pink: #ff4d9a;
+            --secondary-pink: #ff85b3;
+            --light-pink: #ffebf3;
+            --primary-purple: #9d4dff;
+            --secondary-purple: #c285ff;
+            --dark-purple: #4d0066;
+            --gradient-bg: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 100%);
+            --glass-effect: rgba(255, 255, 255, 0.15);
+            --card-shadow: 0 15px 30px rgba(157, 77, 255, 0.2);
+        }
+
+        @keyframes colorShift {
+            0% { --current-primary: var(--primary-pink); }
+            50% { --current-primary: var(--primary-purple); }
+            100% { --current-primary: var(--primary-pink); }
+        }
+
+        header {
+            z-index: 20;
+            background: var(--gradient-bg);
+            color: white;
+            padding: 30px 0;
+            box-shadow: 0 4px 30px rgba(157, 77, 255, 0.3);
+            position: absolute;
+            top: 0;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-effect);
+            text-align: center;
+            width: 100%;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-10%, -10%); }
+            100% { transform: rotate(30deg) translate(10%, 10%); }
+        }
+
+        .logo {
+            font-size: 50px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .scene {
+            z-index: 15;
+            position: absolute;
+            width: 1000px;
+            height: 500px;
+            left: 120px;
+            top: 140px;
+            transition: transform 1s ease-in-out, left 1s ease-in-out, top 1s ease-in-out;
+        }
+
+        .post {
+            position: absolute;
+            bottom: 120px;
+            left: 500px;
+            width: 50px;
+            height: 195px;
+            background: url('./post.png') no-repeat center/cover;
+        }
+
+        .boom {
+            position: absolute;
+            width: 310px;
+            height: 30px;
+            background: url('./boom_.png') no-repeat center/cover;
+            bottom: 290px;
+            left: 530px;
+            transform-origin: left bottom;
+            transform: rotate(-23deg);
+            transition: transform 1s ease-in-out;
+        }
+
+        .car {
+            position: absolute;
+            bottom: 75px;
+            left: 500px;
+            width: 350px;
+            height: 250px;
+            background: url('./car.png') no-repeat center/cover;
+        }
+
+        .bc {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            background: url('./bc.png') no-repeat center/cover;
+            bottom: -105px;
+            left: 200px;
+            transform-origin: left bottom;
+            transition: transform 1s ease-in-out;
+        }
+
+        .loading-bar-container {
+            z-index: 20;
+            position: absolute;
+            bottom: 80px;
+            width: 350px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0;
+            background: var(--gradient-bg);
+            transition: width 0.1s linear;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(157, 77, 255, 0.7);
+        }
+
+        .loading-text {
+            z-index: 20;
+            position: absolute;
+            bottom: 50px;
+            color: rgb(245, 77, 239);
+            font-size: 14px;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bubbles" id="bubblesContainer"></div>
+    
+    <header>
+        <div class="logo">ViziPAzz</div>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo-img" />
+        </div>
+    </header>
+    
+    <div class="scene" id="scene">
+        <div class="post"></div>
+        <div class="boom" id="boom">
+            <div class="bc"></div>
+        </div>
+        <div class="car"></div>
+    </div>
+    
+    <div class="loading-text">Loading your experience...</div>
+    <div class="loading-bar-container">
+        <div class="loading-bar" id="loadingBar"></div>
+    </div>
+
+    <script>
+        // Create faster, more visible bubbles
+        function createBubbles() {
+            const container = document.getElementById('bubblesContainer');
+            
+            // Create more bubbles for better coverage
+            for (let i = 0; i < 40; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                const size = Math.random() * 25 + 5; 
+                const posX = Math.random() * 100;
+                const duration = 5 + Math.random() * 10;
+                const delay = Math.random() * 2;
+                const opacity = 0.5 + Math.random() * 0.5; 
+                const randomX = Math.random();
+                
+                bubble.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${posX}%;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                    opacity: ${opacity};
+                    --random-x: ${randomX};
+                `;
+                
+                container.appendChild(bubble);
+            }
+        }
+
+        // Animation effects
+        setTimeout(() => {
+            document.getElementById('boom').style.transform = 'rotate(-40deg)';
+        }, 1000);
+        
+        setTimeout(() => {
+            document.getElementById('boom').style.transform = 'rotate(-23deg)';
+        }, 3000);
+        setTimeout(() => {
+            document.getElementById('boom').style.transform = 'rotate(-40deg)';
+        }, 5000);
+        
+        
+        // Loading progress
+        let progress = 0;
+        const loadingBar = document.getElementById('loadingBar');
+        
+        function updateProgress() {
+            if (progress < 100) {
+                progress += 0.75;
+                loadingBar.style.width = progress + '%';
+                setTimeout(updateProgress, 50);
+            } else {
+                document.body.classList.add('loaded');
+                setTimeout(() => {
+                    window.location.href = "./FP2.html";
+                }, 500);
+            }
+        }
+
+        // Initialize
+        window.onload = function() {
+            createBubbles();
+            updateProgress();
+        };
+    </script>
+</body>
+</html>

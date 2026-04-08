@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizipass</title>
+    <link rel="stylesheet" href="button.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+
+        
+        .logo-image {
+            left: -20;
+            top: 20%;
+            width: 70px;
+            height: 70px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+        :root {
+            --primary-pink: #ff4d9a;
+            --secondary-pink: #ff85b3;
+            --light-pink: #ffebf3;
+            --primary-purple: #9d4dff;
+            --secondary-purple: #c285ff;
+            --dark-purple: #4d0066;
+            --gradient-bg: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 100%);
+            --glass-effect: rgba(255, 255, 255, 0.15);
+            --card-shadow: 0 15px 30px rgba(157, 77, 255, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        
+        }
+        
+        body {
+            background-color: #faf5ff;
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Enhanced Header */
+        header {
+            background: var(--gradient-bg);
+            color: white;
+            padding: 0px 0;
+            box-shadow: 0 4px 30px rgba(157, 77, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-effect);
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+            z-index: -1;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-10%, -10%); }
+            100% { transform: rotate(30deg) translate(10%, 10%); }
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo i {
+            margin-right: 15px;
+            font-size: 36px;
+            color: var(--light-pink);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        background: transparent; /* Ensure no background interferes */
+    }
+
+    nav ul li a:hover {
+        background-color: var(--glass-effect);
+        transform: translateY(-2px);
+    }
+        
+        nav ul li a i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        /* Enhanced Hero Section */
+        .hero {
+            text-align: center;
+            padding: 120px 0 80px;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            background: var(--gradient-bg);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.08);
+            line-height: 1.2;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--dark-purple);
+            max-width: 700px;
+            margin: 0 auto 50px;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover::before {
+            background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
+        }
+        
+        .btn-primary {
+            background: var(--gradient-bg);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(157, 77, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary-purple);
+            border: 2px solid var(--primary-purple);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light-pink);
+            border-color: var(--secondary-pink);
+            transform: translateY(-5px);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Enhanced Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 80px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-align: center;
+            border-top: 4px solid var(--primary-pink);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-bg);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(157, 77, 255, 0.3);
+        }
+        
+        .feature-card:hover::after {
+            height: 100%;
+            opacity: 0.1;
+        }
+        
+        .feature-icon {
+            font-size: 42px;
+            margin-bottom: 25px;
+            color: var(--primary-purple);
+            background: var(--light-pink);
+            width: 80px;
+            height: 80px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(157, 77, 255, 0.2);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: rotate(10deg) scale(1.1);
+            background: var(--gradient-bg);
+            color: white;
+        }
+        
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark-purple);
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        /* Enhanced Footer */
+        footer {
+            background: var(--dark-purple);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 100px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: var(--gradient-bg);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--light-pink);
+            position: relative;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            bottom: -10px;
+            left: 0;
+            background: var(--secondary-pink);
+        }
+        
+        .footer-section p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary-pink);
+            transform: translateY(-3px) scale(1.1);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Enhanced Floating Decorations */
+        .floating {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 204, 230, 0.4);
+            filter: blur(40px);
+            z-index: 0;
+            opacity: 0.8;
+        }
+        
+        .floating-1 {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            right: -200px;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .floating-2 {
+            width: 300px;
+            height: 300px;
+            bottom: 100px;
+            left: -150px;
+            animation: float 12s infinite ease-in-out reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .hero {
+                padding: 100px 0 60px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .feature-card {
+                padding: 30px 20px;
+            }
+        }
+        a {
+  color: black;           /* Change link color */
+  text-decoration: none;  /* Remove underline */
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures space between elements */
+    padding: 0 20px;
+}
+
+.arrow-container {
+    position: relative;
+    left: -150px;
+    display: flex;
+    align-items: center;
+}
+
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="arrow-container">
+                        <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+                          <span class="arrow">←</span>
+                        </button>
+                        
+                        <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+                          <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+                        </button>
+                      </div>
+                    
+                    <img src="./car1.png" alt="ViziPazz Logo" class="logo-image">
+                    ViziPAzz
+                </div>
+                <nav>
+                    <ul>
+                        <li><img src="logo.png" width="100%" height="60px" alt="logo"></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="hero">
+            <div class="floating floating-1"></div>
+            <div class="floating floating-2"></div>
+            <h1>ViziPAzz</h1><h1>Visitor's Pass Management</h1>
+            <p>Streamline your visitor management with our elegant and secure gate pass system.</p>
+            <div class="cta-buttons">
+                <a href="#features-section" class="btn btn-primary"><i class="fas fa-rocket"></i> Get Started</a>
+            </div>
+        </section>
+        
+        <section id="features-section" class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-qrcode"></i>
+                 <a href="C:\Users\anany_zkhrray\OneDrive\Desktop\Programs\electron\GUEST_DETAILS\guest_details.html">
+                </div>
+               <h3>Guest Access</h3>
+                <p>"Welcome with ease: Guests can quickly generate gate passes for smooth entry.</p>
+            </div></a>
+            <a href="secondpage.html"> <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <h3>Parent Access</h3>
+                <p>Seamless access: Parents can effortlessly generate gate passes for hassle-free entry.</p>
+            </div></a>
+           
+            <a href="security.html">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-person-military-pointing"></i>
+                </div>
+               <h3>Security Access</h3>
+                <p>Fortified access: Securely log in to manage and generate gate passes with ease.</p>
+            </div></a>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About ViziPazz</h3>
+                    <p>The premium gate pass management system designed for modern facilities that value both security and aesthetics.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#" style="color: white; text-decoration: none;">Home</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Support</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Mythreyi Bhavanam, Amrita Vishwa Vidyapeetham</p>
+                    <p><i class="fas fa-phone"></i> 9096261008</p>
+                    <p><i class="fas fa-envelope"></i> vizipazz@gmail.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 ViziPazz Pass System. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

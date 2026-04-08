@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login or SignUp</title>
+  <link rel="stylesheet" href="button.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-pink: #ff4d9a;
+      --secondary-pink: #ff85b3;
+      --light-pink: #ffebf3;
+      --primary-purple: #9d4dff;
+      --secondary-purple: #c285ff;
+      --dark-purple: #4d0066;
+      --gradient-bg: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 100%);
+      --glass-effect: rgba(255, 255, 255, 0.15);
+      --card-shadow: 0 15px 30px rgba(157, 77, 255, 0.2);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background-color: #faf5ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* EXACT SAME HEADER AS FIRST PAGE */
+    header {
+      background: var(--gradient-bg);
+      color: white;
+      padding: 20px 0;
+      box-shadow: 0 4px 30px rgba(157, 77, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-effect);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+      transform: rotate(30deg);
+      animation: shine 8s infinite linear;
+      z-index: -1;
+    }
+    
+    @keyframes shine {
+      0% { transform: rotate(30deg) translate(-10%, -10%); }
+      100% { transform: rotate(30deg) translate(10%, 10%); }
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .logo-image {
+      width: 70px;
+      height: 70px;
+      margin-right: 15px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+    
+    nav ul li {
+      margin-left: 30px;
+      position: relative;
+    }
+    
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    nav ul li a:hover {
+      background-color: var(--glass-effect);
+      transform: translateY(-2px);
+    }
+    
+    nav ul li a i {
+      margin-right: 8px;
+      font-size: 16px;
+    }
+
+    /* UPDATED BUTTON STYLES TO MATCH FEATURE CARDS */
+    .wrapper {
+      max-width: 1200px;
+      margin: 80px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 0 20px;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      text-align: center;
+      border-top: 4px solid var(--primary-pink);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .auth-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-bg);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+    
+    .auth-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(157, 77, 255, 0.3);
+    }
+    
+    .auth-card:hover::after {
+      height: 100%;
+      opacity: 0.1;
+    }
+    
+    .auth-icon {
+      font-size: 42px;
+      margin-bottom: 25px;
+      color: var(--primary-purple);
+      background: var(--light-pink);
+      width: 80px;
+      height: 80px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(157, 77, 255, 0.2);
+    }
+    
+    .auth-card:hover .auth-icon {
+      transform: rotate(10deg) scale(1.1);
+      background: var(--gradient-bg);
+      color: white;
+    }
+    
+    .auth-card h3 {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: var(--dark-purple);
+      font-weight: 600;
+    }
+    .logo-container {
+  position: absolute;
+  top: 0px;
+  right: 30px;
+}
+.logo {
+  height: 50px; 
+  width: auto;
+  border-radius: 12px; 
+}
+.arrow-container {
+    position:absolute;
+    top:10px;
+    left:10px;
+  }
+  </style>
+</head>
+<body>
+
+  <!-- EXACT SAME HEADER AS FIRST PAGE -->
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <img src="car1.png" alt="ViziPazz Logo" class="logo-image">
+        ViziPazz
+      </div>
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo" />
+      </div>
+      
+    </div>
+  </header>
+  <div class="arrow-container">
+    <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+      <span class="arrow">←</span>
+    </button>
+    
+    <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+      <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+    </button>
+  </div>
+  <!-- Login/Sign Up Cards matching Feature Cards style -->
+  <div class="wrapper">
+    <a href="login.html" class="auth-card">
+      <div class="auth-icon">
+        <i class="fas fa-sign-in-alt"></i>
+      </div>
+      <h3>Login</h3>
+      <p>Access your account with your credentials</p>
+    </a>
+    
+    <a href="signup.html" class="auth-card">
+      <div class="auth-icon">
+        <i class="fas fa-user-plus"></i>
+      </div>
+      <h3>Sign Up</h3>
+      <p>Create a new account to get started</p>
+    </a>
+  </div>
+
+</body>
+</html>

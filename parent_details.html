@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parent Details</title>
+  <link rel="stylesheet" href="style1.css" />
+  <link rel="stylesheet" href="button.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+    .input-box {
+      margin-bottom: 15px;
+    }
+    .form-error {
+      color: red;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
+      display: none;
+    }
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #vehicleSelection {
+      margin-bottom: 20px;
+    }
+    #qrcode {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .logo-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.logo {
+  height: 50px; 
+  width: auto;
+  border-radius: 12px; 
+}
+.arrow-container {
+    position:absolute;
+    top:10px;
+    left:10px;
+  }
+  </style>
+</head>
+<body>
+  <div class="logo-container">
+    <img src="logo.png" alt="Logo" class="logo" />
+  </div>
+  <div class="arrow-container">
+    <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+      <span class="arrow">←</span>
+    </button>
+    
+    <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+      <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+    </button>
+  </div>
+  <div class="logo-container">
+    <img src="logo.png" alt="Logo" class="logo" />
+  </div>
+  <div class="wrapper">
+    <form id="parentForm">
+      <h1>PARENT DETAILS</h1>
+      <div id="formError" class="form-error">Please fill all required fields</div>
+
+      <div class="input-box">
+        <input type="text" id="guestName" placeholder="Guest Name" required oninput="validateForm()">
+        <i class='bx bxs-user'></i>
+        <div id="guestNameError" class="error-message">Please enter a valid name (letters and spaces only)</div>
+      </div>
+      <div class="input-box">
+        <input type="text" id="phoneNumber" placeholder="Phone Number" required oninput="validateForm()">
+        <i class='bx bx-phone'></i>
+        <div id="phoneError" class="error-message">Please enter a valid phone number (10 digits only)</div>
+      </div>
+      <div class="input-box">
+        <input type="text" id="Student" placeholder="Student ID" required oninput="validateForm()">
+        <i class='bx bx-child'></i>
+        <div id="studentIdError" class="error-message">Please enter a valid Student ID</div>
+      </div>
+      <div id="vehicleSelection">
+        Vehicle &nbsp;
+        <button type="button" class="buttonn" onclick="showCarNumber(true)">YES</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button" class="buttonn" onclick="showCarNumber(false)">NO</button>
+        <div id="vehicleError" class="error-message">Please select Yes or No for vehicle</div>
+      </div>
+
+      <div class="input-box" id="carNumberBox" style="display: none;">
+        <input type="text" id="carNumber" placeholder="XX00XX0000" title="Format: XX00XX0000 (e.g., AP21AB1234)" oninput="validateForm()">
+        <i class='bx bxs-car'></i>
+        <div id="carNumberError" class="error-message">Please enter a valid car number (Format: XX00XX0000)</div>
+      </div>
+
+      <div class="remember-forget">
+        <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn" disabled>SUBMIT</button>
+    </form>
+
+    <div id="qrcode"></div>
+  </div>
+
+  <script>
+    let carRequired = false;
+    let vehicleSelected = null;
+
+    window.onload = function () {
+      loadRememberedDetails();
+      validateForm();
+    };
+
+    function showCarNumber(show) {
+      const carBox = document.getElementById("carNumberBox");
+      const carInput = document.getElementById("carNumber");
+
+      vehicleSelected = show;
+      document.getElementById("vehicleError").style.display = "none";
+
+      if (show) {
+        carBox.style.display = "block";
+        carInput.setAttribute("required", "true");
+        carRequired = true;
+      } else {
+        carBox.style.display = "none";
+        carInput.removeAttribute("required");
+        carInput.value = "";
+        document.getElementById("carNumberError").style.display = "none";
+        carRequired = false;
+      }
+      validateForm();
+    }
+
+    function validateForm() {
+      const guestName = document.getElementById("guestName").value.trim();
+      const phoneNumber = document.getElementById("phoneNumber").value.trim();
+      const studentID = document.getElementById("Student").value.trim();
+      const carNumber = document.getElementById("carNumber").value.trim();
+      const submitBtn = document.getElementById("submitBtn");
+
+      let valid = true;
+
+      // Name
+      if (guestName !== "" && !guestName.match(/^[A-Za-z ]+$/)) {
+        document.getElementById("guestNameError").style.display = "block";
+        valid = false;
+      } else {
+        document.getElementById("guestNameError").style.display = "none";
+      }
+
+      // Phone
+      if (phoneNumber !== "" && !phoneNumber.match(/^\d{10}$/)) {
+        document.getElementById("phoneError").style.display = "block";
+        valid = false;
+      } else {
+        document.getElementById("phoneError").style.display = "none";
+      }
+
+      // Student ID
+      if (studentID !== "" && !studentID.match(/^CB\.[A-Z]{2}\.[UPIR][2-5][A-Z]{3}[0-9]{5}$/)) {
+        document.getElementById("studentIdError").style.display = "block";
+        valid = false;
+      } else {
+        document.getElementById("studentIdError").style.display = "none";
+      }
+
+      // Car Number
+      if (carRequired && carNumber !== "" && !carNumber.match(/^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/)) {
+        document.getElementById("carNumberError").style.display = "block";
+        valid = false;
+      } else {
+        document.getElementById("carNumberError").style.display = "none";
+      }
+
+      // Vehicle selection check
+      if (vehicleSelected === null) {
+        valid = false;
+      }
+
+      submitBtn.disabled = !valid;
+    }
+
+    document.getElementById("parentForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const guestName = document.getElementById("guestName").value.trim();
+      const phoneNumber = document.getElementById("phoneNumber").value.trim();
+      const studentID = document.getElementById("Student").value.trim();
+      const carNumber = document.getElementById("carNumber").value.trim();
+      const rememberMe = document.getElementById("rememberMe").checked;
+
+      const isValid = (
+        guestName.match(/^[A-Za-z ]+$/) &&
+        phoneNumber.match(/^\d{10}$/) &&
+        studentID.match(/^CB\.SC\.U4[A-Za-z0-9]{8}$/) &&
+        (vehicleSelected !== null) &&
+        (!carRequired || carNumber.match(/^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/))
+      );
+
+      if (!isValid) {
+        document.getElementById("formError").style.display = "block";
+        return;
+      }
+
+      document.getElementById("formError").style.display = "none";
+
+      const formData = { guestName, phoneNumber, studentID, carNumber };
+
+      if (rememberMe) {
+        localStorage.setItem("parentDetails", JSON.stringify(formData));
+      } else {
+        localStorage.removeItem("parentDetails");
+      }
+
+      generateQRCode(formData);
+    });
+
+    function generateQRCode(formData) {
+      let qrText = `Guest Name: ${formData.guestName}\nPhone: ${formData.phoneNumber}\nStudent ID: ${formData.studentID}`;
+      if (formData.carNumber) {
+        qrText += `\nCar Number: ${formData.carNumber}`;
+      }
+
+      document.getElementById("qrcode").innerHTML = "";
+      new QRCode(document.getElementById("qrcode"), {
+        text: qrText,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      setTimeout(downloadQRCode, 500);
+    }
+    function downloadQRCode() {
+            const qrCodeElement = document.querySelector("#qrcode img");
+            if (!qrCodeElement) return;
+            
+            // Create a canvas element
+            const canvas = document.createElement("canvas");
+            canvas.width = qrCodeElement.width;
+            canvas.height = qrCodeElement.height;
+            
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(qrCodeElement, 0, 0);
+            
+            // Convert canvas to JPG and download
+            const link = document.createElement("a");
+            link.download = "parent-qrcode.jpg";
+            link.href = canvas.toDataURL("image/jpeg", 1.0);
+            link.click();
+        }
+    function loadRememberedDetails() {
+      const saved = localStorage.getItem("parentDetails");
+      if (saved) {
+        const details = JSON.parse(saved);
+        document.getElementById("guestName").value = details.guestName || "";
+        document.getElementById("phoneNumber").value = details.phoneNumber || "";
+        document.getElementById("Student").value = details.studentID || "";
+        document.getElementById("carNumber").value = details.carNumber || "";
+        document.getElementById("rememberMe").checked = true;
+
+        if (details.carNumber) {
+          showCarNumber(true);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
+

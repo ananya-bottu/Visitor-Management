@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="button.css">
+  <link rel="stylesheet" href="style1.css" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+    .form-error {
+      color: red;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      display: none;
+    }
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .btn:disabled:hover {
+      background-color: #cccccc;
+    }
+
+    .input-box {
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .input-box .bx-show,
+    .input-box .bx-hide {
+      position: absolute;
+      right: 45px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .input-box i.bxs-lock-alt {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #333;
+    }
+  .logo-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.logo {
+  height: 50px; 
+  width: auto;
+  border-radius: 12px; 
+}
+.arrow-container {
+    position:absolute;
+    top:10px;
+    left:10px;
+  }
+
+  </style>
+</head>
+<body>
+  <div class="arrow-container">
+    <button class="arrow-btn" aria-label="Back" onclick="history.go(-1)">
+      <span class="arrow">←</span>
+    </button>
+    
+    <button class="arrow-btn" aria-label="Forward" onclick="history.go(1)">
+      <span class="arrow forward-arrow">→</span> <!-- Changed to right arrow -->
+    </button>
+  </div>
+  <div class="logo-container">
+    <img src="logo.png" alt="Logo" class="logo" />
+  </div>
+  
+  <div class="wrapper">
+    <form onsubmit="return handleSignup()" id="signupForm" novalidate>
+      <h1>Sign Up</h1>
+      <div id="formError" class="form-error">Please fill all required fields correctly</div>
+
+      <div class="input-box">
+        <input type="email" id="email" placeholder="Parent Mail" required oninput="validateSignupForm()" onblur="validateSignupField('email')">
+        <i class='bx bxs-user-plus'></i>
+        <div id="emailError" class="error-message">Please enter a valid email</div>
+      </div>
+
+      <div class="input-box">
+        <input type="password" id="password" placeholder="Create Password" required oninput="validateSignupForm()" onblur="validateSignupField('password')">
+        <i class='bx bx-show' id="togglePassword"></i>
+        <i class='bx bxs-lock-alt'></i>
+        <div id="passwordError" class="error-message">
+          Password must be at least 8 characters, including uppercase, lowercase, number, and special character
+        </div>
+      </div>
+
+      <div class="input-box">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required oninput="validateSignupForm()" onblur="validateSignupField('confirmPassword')">
+        <i class='bx bx-show' id="toggleConfirmPassword"></i>
+        <i class='bx bxs-lock-alt'></i>
+        <div id="confirmPasswordError" class="error-message">Passwords do not match</div>
+      </div>
+
+      <div class="remember-forget">
+        <label><input type="checkbox" id="rememberMe"> Remember me</label>
+      </div>
+
+      <button type="submit" class="btn" id="signupBtn" disabled>Sign Up</button>
+    </form>
+  </div>
+
+  <script>
+    //  Redirect to login if already signed up
+    if (localStorage.getItem("registeredEmail") && localStorage.getItem("registeredPassword")) {
+      window.location.href = "login.html";
+    }
+    window.onload = function () {
+      const saved = localStorage.getItem("rememberedEmail");
+      if (saved) {
+        document.getElementById("email").value = saved;
+        document.getElementById("rememberMe").checked = true;
+      }
+      validateSignupForm();
+    };
+
+    function validateSignupField(fieldId) {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+      const emailPattern = /^[^\s@]+@[a-zA-Z]+\.([a-zA-Z]{2,})$/;
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+      if (fieldId === "email") {
+        document.getElementById("emailError").style.display =
+          emailPattern.test(email) ? "none" : "block";
+      }
+
+      if (fieldId === "password") {
+        document.getElementById("passwordError").style.display =
+          passwordPattern.test(password) ? "none" : "block";
+      }
+
+      if (fieldId === "confirmPassword") {
+        document.getElementById("confirmPasswordError").style.display =
+          password === confirmPassword && password !== "" ? "none" : "block";
+      }
+    }
+
+    function validateSignupForm() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+      const emailPattern = /^[^\s@]+@[a-zA-Z]+\.([a-zA-Z]{2,})$/;
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+      const isValid =
+        emailPattern.test(email) &&
+        passwordPattern.test(password) &&
+        password === confirmPassword;
+
+      document.getElementById("signupBtn").disabled = !isValid;
+      document.getElementById("formError").style.display = "none";
+    }
+
+    function handleSignup() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirmPassword = document.getElementById("confirmPassword").value.trim();
+      const rememberMe = document.getElementById("rememberMe").checked;
+
+      if (password !== confirmPassword) {
+        document.getElementById("formError").textContent = "Passwords do not match";
+        document.getElementById("formError").style.display = "block";
+        return false;
+      }
+
+      localStorage.setItem("registeredEmail", email);
+      localStorage.setItem("registeredPassword", password);
+
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", email);
+      } else {
+        localStorage.removeItem("rememberedEmail");
+      }
+
+      // ✅ Redirect directly to login.html
+      window.location.href = "login.html";
+      return false;
+    }
+
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+
+    togglePassword.addEventListener('click', function () {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('bx-show');
+      this.classList.toggle('bx-hide');
+    });
+
+    toggleConfirmPassword.addEventListener('click', function () {
+      const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPasswordInput.setAttribute('type', type);
+      this.classList.toggle('bx-show');
+      this.classList.toggle('bx-hide');
+    });
+  </script>
+</body>
+</html>
